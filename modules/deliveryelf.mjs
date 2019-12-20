@@ -88,6 +88,10 @@ const go_to = function(x,y,outbound=true) {
 
 }
 
+// Need an ElfPack class - regulates the
+// rate and number of elves that are
+// active at any given time
+
 class DeliveryElf extends Elf {
   constructor(canvas) {
     super(canvas);
@@ -112,9 +116,6 @@ class DeliveryElf extends Elf {
     await go_to.call(this,start.x,start.y,false);
     this.busy = false;
   }
-  // tween to X
-  // rotate in direction of Y
-  // tween to y
 
   // .name
 
