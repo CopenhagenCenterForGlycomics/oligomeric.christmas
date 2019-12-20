@@ -38,6 +38,56 @@ const render_label = (label,x,y,canvas) => {
   ctx.restore();
 }
 
+TWEEN.autoPlay(true); // simplify the your code
+
+
+const go_to = function(x,y,outbound=true) {
+
+  let coords = { x: this.x, y: this.y, rotate: this.rotate };
+  let first_target = outbound ? { x: x, y: this.y } : { y: y, x: this.x };
+  let total_distance = Math.abs(y - this.y) + Math.abs(x - this.x);
+  let second_target = {x,y};
+  let tween_first_target = new TWEEN.Tween(coords)
+  .to(first_target, 10*(Math.abs(first_target.x-this.x)+Math.abs(first_target.y-this.y)))
+  .easing(TWEEN.Easing.Linear)
+  .on('update', ({ x, y }) => {
+    this.rotate = -90 + Math.atan2(first_target.y - this.y, first_target.x - this.x) * 180 / Math.PI;
+    this.x = x;
+    this.y = y;
+    coords.rotate = this.rotate;
+  });
+
+
+  let tween_rotate = new TWEEN.Tween(coords)
+  .to({ rotate: -90 + Math.atan2(y - first_target.y, x - first_target.x) * 180 / Math.PI },500)
+  .on('update', ({rotate}) => {
+    this.rotate = rotate;
+  });
+
+
+  let tween_final_target = new TWEEN.Tween(coords)
+  .to({x,y},10*(Math.abs(first_target.x-x)+Math.abs(first_target.y-y)))
+  .easing(TWEEN.Easing.Linear)
+  .on('update', ({ x, y }) => {
+    this.rotate = -90 + Math.atan2(y - this.y, x - this.x) * 180 / Math.PI;
+    this.x = x;
+    this.y = y;
+  });  
+
+  tween_rotate.on('complete', () => {
+    tween_final_target.start();
+  });
+  tween_first_target.on('complete', () => {
+    tween_rotate.start();
+  });
+  tween_first_target.start();
+
+  return new Promise( resolve => {
+    tween_final_target.on('complete',resolve);
+  });
+
+}
+
 class DeliveryElf extends Elf {
   constructor(canvas) {
     super(canvas);
@@ -47,8 +97,21 @@ class DeliveryElf extends Elf {
   // (Move to new home if not at home)
 
 
+  go_to(x,y) {
+    go_to.call(this,x,y);
+  }
 
-  //deliverCargoAndReturn(x,y)
+  async deliverCargoAndReturn(x,y) {
+    if (this.busy) {
+      return;
+    }
+    let start = {x: this.x, y: this.y};
+    this.busy = true;
+    await go_to.call(this,x,y);
+    this.cargo = null;
+    await go_to.call(this,start.x,start.y,false);
+    this.busy = false;
+  }
   // tween to X
   // rotate in direction of Y
   // tween to y
@@ -61,8 +124,10 @@ class DeliveryElf extends Elf {
     let cargo_x = this.x + Math.floor(Math.cos(rad(this.rotate+90)) * CARGO_DISTANCE);
     let cargo_y = this.y + Math.floor(Math.sin(rad(this.rotate+90)) * CARGO_DISTANCE);
     let ctx = this.canvas.getContext('2d');
-    ctx.drawImage(this.cargo,0,0,CARGO_ICON_SIZE,CARGO_ICON_SIZE,cargo_x - 0.5*CARGO_OUTPUT_SIZE,cargo_y - 0.5*CARGO_OUTPUT_SIZE,CARGO_OUTPUT_SIZE,CARGO_OUTPUT_SIZE );
-    render_label('FOO',this.x,this.y,this.canvas);
+    if (this.cargo) {
+      ctx.drawImage(this.cargo,0,0,CARGO_ICON_SIZE,CARGO_ICON_SIZE,cargo_x - 0.5*CARGO_OUTPUT_SIZE,cargo_y - 0.5*CARGO_OUTPUT_SIZE,CARGO_OUTPUT_SIZE,CARGO_OUTPUT_SIZE );
+    }
+    render_label('Nisse',this.x,this.y,this.canvas);
   }
 }
 
