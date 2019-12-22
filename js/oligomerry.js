@@ -1,5 +1,5 @@
-import DeliveryElf from '../modules/deliveryelf.mjs'
-
+import DeliveryElf from './deliveryelf';
+import GlycanForest from './glycanforest';
 
 const generate_icon = () => {
   let canvas = document.createElement('canvas');
@@ -13,10 +13,16 @@ const generate_icon = () => {
   return canvas;
 };
 
+window.forest = new GlycanForest(document.querySelector('#tree_canvas'));
+window.forest.startGrowing();
+setInterval(() => {
+  window.forest.render();
+},100);
+
 const main_cargo = generate_icon();
 
-window.elves = new Array(20).fill(0).map( () => {
-  let elf = new DeliveryElf(document.querySelector('canvas'));
+window.elves = new Array(1).fill(0).map( () => {
+  let elf = new DeliveryElf(document.querySelector('#elf_canvas'));
   elf.x = Math.floor(Math.random() * 25)*32;
   elf.y = Math.floor(Math.random() * 25)*32;
   elf.rotate = 0;

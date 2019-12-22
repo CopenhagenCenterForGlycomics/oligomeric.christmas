@@ -1,0 +1,37 @@
+{
+  "name": "oligomerry",
+  "version": "1.0.0",
+  "description": "",
+  "module": "./js/oligomerry.js",
+  "scripts": {
+    "build-web": "./node_modules/.bin/webpack -d",
+    "build-watch-web": "./node_modules/.bin/webpack --watch",
+    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.conf.js",
+    "deploy": "rm -rf dist && ./node_modules/.bin/webpack --config webpack.prod.conf.js && ./deploy.sh prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:hirenj/oligomerry.git"
+  },
+  "author": "hirenj@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "glycan.js": "github:hirenj/glycan.js",
+    "es6-tween": "^5.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7",
+    "@babel/preset-env": "",
+    "babel-loader": "^8.0.5",
+    "compression-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.5",
+    "core-js": "2",
+    "html-webpack-plugin": "^3.2.0",
+    "raw-loader": "^3.1.0",
+    "terser-webpack-plugin": "^2.2.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1",
+    "webpack-merge": "^4.2.2"
+  }
+}

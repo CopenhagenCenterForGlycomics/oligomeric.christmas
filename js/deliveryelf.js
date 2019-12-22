@@ -1,4 +1,6 @@
-import Elf from './elf.mjs';
+import Elf from './elf.js';
+
+import { Easing, Tween, autoPlay } from 'es6-tween';
 
 const rad = (angle) => angle * (Math.PI / 180);
 
@@ -38,7 +40,7 @@ const render_label = (label,x,y,canvas) => {
   ctx.restore();
 }
 
-TWEEN.autoPlay(true); // simplify the your code
+autoPlay(true); // simplify the your code
 
 
 const go_to = function(x,y,outbound=true) {
@@ -47,9 +49,9 @@ const go_to = function(x,y,outbound=true) {
   let first_target = outbound ? { x: x, y: this.y } : { y: y, x: this.x };
   let total_distance = Math.abs(y - this.y) + Math.abs(x - this.x);
   let second_target = {x,y};
-  let tween_first_target = new TWEEN.Tween(coords)
+  let tween_first_target = new Tween(coords)
   .to(first_target, 10*(Math.abs(first_target.x-this.x)+Math.abs(first_target.y-this.y)))
-  .easing(TWEEN.Easing.Linear)
+  .easing(Easing.Linear)
   .on('update', ({ x, y }) => {
     this.rotate = -90 + Math.atan2(first_target.y - this.y, first_target.x - this.x) * 180 / Math.PI;
     this.x = x;
@@ -58,16 +60,16 @@ const go_to = function(x,y,outbound=true) {
   });
 
 
-  let tween_rotate = new TWEEN.Tween(coords)
+  let tween_rotate = new Tween(coords)
   .to({ rotate: -90 + Math.atan2(y - first_target.y, x - first_target.x) * 180 / Math.PI },500)
   .on('update', ({rotate}) => {
     this.rotate = rotate;
   });
 
 
-  let tween_final_target = new TWEEN.Tween(coords)
+  let tween_final_target = new Tween(coords)
   .to({x,y},10*(Math.abs(first_target.x-x)+Math.abs(first_target.y-y)))
-  .easing(TWEEN.Easing.Linear)
+  .easing(Easing.Linear)
   .on('update', ({ x, y }) => {
     this.rotate = -90 + Math.atan2(y - this.y, x - this.x) * 180 / Math.PI;
     this.x = x;
