@@ -137,7 +137,7 @@ class DeliveryElf extends Elf {
     if (this.cargo) {
       ctx.drawImage(this.cargo,0,0,CARGO_ICON_SIZE,CARGO_ICON_SIZE,cargo_x - 0.5*CARGO_OUTPUT_SIZE,cargo_y - 0.5*CARGO_OUTPUT_SIZE,CARGO_OUTPUT_SIZE,CARGO_OUTPUT_SIZE );
     }
-    render_label('Nisse',this.x,this.y,this.canvas);
+    render_label(this.name || 'Nisse',this.x,this.y,this.canvas);
   }
 }
 

@@ -3,20 +3,37 @@
 <head>
 	<title>Oligomerry.Christmas</title>
 	<style>
-		#container canvas {
+		@import url('https://fonts.googleapis.com/css?family=Mountains+of+Christmas&display=swap');
+
+		#forest canvas {
 			position: absolute;
 			top: 0;
 			left: 0;
 			width: 100%;
 			height: 100%;
-			object-fit: contain;
+		}
+		#forest canvas:last-child {
+			z-index: -1;
+		}
+		#forest {
+			position: relative;
+			width: 100vw;
+			height: calc(100vh + 200px);
+		}
+		h1 {
+			font-family: 'Mountains of Christmas', cursive;
+			font-size: 50px;
+			position: absolute;
 		}
 	</style>
 </head>
 <body>
-<div id="container">
-<canvas id="tree_canvas" width="800px" height="800px"></canvas>
-<canvas id="elf_canvas" width="800px" height="800px"></canvas>
+<section>
+	<h1>Oligomeric Christmas!</h1>
+</section>
+<div id="forest">
+<canvas id="tree_canvas"></canvas>
+<canvas id="elf_canvas"></canvas>
 </div>
 </body>
 </html>

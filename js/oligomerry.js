@@ -1,72 +1,94 @@
 import DeliveryElf from './deliveryelf';
 import GlycanForest from './glycanforest';
+import { TOP_MARGIN } from './glycanforest';
 import ElfPack from './elfpack';
 
+console.log(TOP_MARGIN);
 
 
-window.forest = new GlycanForest(document.querySelector('#tree_canvas'));
-window.forest.startGrowing();
+const size_canvases = () => {
+  let size = document.querySelector('#forest').getBoundingClientRect();
+  for (let canvas of document.querySelectorAll('#forest canvas')) {
+    canvas.width = size.width;
+    canvas.height = size.height;
+  }
+  return {w: size.width, h: size.height};
+};
+
+let canvas_size = size_canvases();
+
+let forest = new GlycanForest(document.querySelector('#tree_canvas'));
+
+forest.margin = 50;
+forest.resize();
+
+forest.startGrowing();
+
 setInterval(() => {
-  window.forest.render();
+  requestAnimationFrame( () => {
+    forest.render();
+  });
 },100);
 
-let packs = [];
-
-let pack = new ElfPack(document.querySelector('#elf_canvas'),3,'Man');
-pack.x = 32;
-pack.y = 32;
-pack.interval = 4000;
-
-pack.deliverTo(window.forest);
-
-packs.push(pack);
-
-pack = new ElfPack(document.querySelector('#elf_canvas'),3,'Xyl');
-pack.x = 700;
-pack.y = 500;
-pack.interval = 6000;
-
-pack.deliverTo(window.forest);
-
-packs.push(pack);
-
-pack = new ElfPack(document.querySelector('#elf_canvas'),2,'Gal');
-pack.x = 700;
-pack.y = 300;
-pack.interval = 5000;
-
-pack.deliverTo(window.forest);
-
-packs.push(pack);
 
 
-// window.elves = new Array(1).fill(0).map( () => {
-//   let elf = new DeliveryElf(document.querySelector('#elf_canvas'));
-//   elf.x = Math.floor(Math.random() * 25)*32;
-//   elf.y = Math.floor(Math.random() * 25)*32;
-//   elf.rotate = 0;
-//   elf.cargo = main_cargo;
-//   return elf;
-// });
+let construct_packs = () => {
+  let packs = [];
+  let pack = new ElfPack(document.querySelector('#elf_canvas'),3,'Man');
+  pack.interval = 4000;
+  pack.placement = {t: 1, l: 0};
+  packs.push(pack);
+
+  pack = new ElfPack(document.querySelector('#elf_canvas'),3,'Xyl');
+  pack.placement = {t: 0, l: 0};
+  pack.interval = 6000;
+  packs.push(pack);
+
+  pack = new ElfPack(document.querySelector('#elf_canvas'),3,'NeuAc');
+  pack.placement = {t: 0, l: 1};
+  pack.interval = 6000;
+  packs.push(pack);
 
 
-// setInterval( () => {
-//   for (let elf of window.elves) {
-//     if ( ! elf.busy ) {
-//       while (! elf.targx || Math.abs(elf.targx - elf.x) < 32 || Math.abs(elf.targy - elf.y) < 32 ) {
-//         elf.targx = 32+Math.floor(Math.random() * 25)*32;
-//         elf.targy = 32+Math.floor(Math.random() * 25)*32;
-//       }
-//       elf.cargo = main_cargo;
-//       elf.rotate = 0;
-//     }
-//   }
-// },5000);
+  pack = new ElfPack(document.querySelector('#elf_canvas'),2,'Gal');
+  pack.placement = {t: 1, l: 1};
+  pack.interval = 5000;
+
+  packs.push(pack);
+
+  pack = new ElfPack(document.querySelector('#elf_canvas'),2,'GlcA');
+  pack.placement = {t: 0.5, l: 1};
+  pack.interval = 5000;
+
+  packs.push(pack);
+
+  pack = new ElfPack(document.querySelector('#elf_canvas'),2,'GalNAc');
+  pack.placement = {t: 0.5, l: 0};
+  pack.interval = 5000;
+
+  packs.push(pack);
+
+  return packs;
+
+};
+
+const position_pack = (pack,canvas_size) => {
+  pack.x = canvas_size.w*pack.placement.l + (pack.placement.l <= 0.5 ? 64 : -128 );
+  pack.y = TOP_MARGIN + (canvas_size.h - TOP_MARGIN)*pack.placement.t + (pack.placement.t < 0.5 ? 64 : pack.placement.t === 0.5 ? 0 : -128 );
+};
+
+let packs = construct_packs();
+
+for (let pack of packs) {
+  pack.deliverTo(forest);
+  position_pack(pack,canvas_size);
+}
 
 setInterval( () => {
 
 requestAnimationFrame(() => {
-  pack.canvas.getContext('2d').clearRect(0, 0, pack.canvas.width, pack.canvas.height);
+  let canvas = document.querySelector('#elf_canvas');
+  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
   for (let pack of packs) {
     for (let elf of pack.elves) {
       elf.render();

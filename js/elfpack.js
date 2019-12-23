@@ -23,13 +23,13 @@ const get_cargo_icon = async (cargo) => {
 
 const update_pack_position = pack => {
   let elf_count = pack.elves.length;
-  let elf_rows = chunk(pack.elves,3);
+  let elf_rows = chunk(pack.elves,2);
   let x = pack.x;
   let y = pack.y;
   let row_count = 0;
   for (let row of elf_rows) {
     row.forEach( (elf,i) => {
-      elf.home = { x: x + row_count*ELF_PACK_HEIGHT, y: y + i*ELF_PACK_WIDTH };
+      elf.home = { x: x + i*ELF_PACK_HEIGHT, y: y + row_count*ELF_PACK_WIDTH };
       if ( ! elf.busy ) {
         elf.x = elf.home.x;
         elf.y = elf.home.y;
@@ -44,15 +44,20 @@ const make_delivery = async (elf,cargo,target) => {
     target.t.addChild(target.r,3,cargo);
     target.t.deliverycount--;
     target.r.active = false;
+    target.t.active = false;
     if (target.t.deliverycount < 1) {
       target.t.tween.play();
       target.t.paused = false;
+      if ([...target.t.sugar.composition()].length >= 5) {
+        target.t.plant();
+      }
     }
     delete elf.ping;
   };
   elf.cargo = await get_cargo_icon(cargo);
   elf.deliverCargoAndReturn(target.t.x,target.t.y - 0.5*target.t.canvas.height);
   target.r.active = true;
+  target.t.active = true;
   target.t.tween.pause();
   target.t.paused = true;
   target.t.deliverycount = (target.t.deliverycount || 0) + 1;
@@ -63,6 +68,9 @@ class ElfPack {
     this.canvas = canvas;
     this.elves = Array(population).fill(null);
     this.elves = this.elves.map( () => new DeliveryElf(canvas));
+    this.elves.forEach( elf => {
+      elf.name = cargo_type;
+    });
     this.x = 0;
     this.y = 0;
     this._interval = 1000;

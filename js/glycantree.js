@@ -39,7 +39,7 @@ const renderSugar = (seq) => {
         res_canv.height = 32;
         res_canv.getContext('2d').drawImage(res,50,50,100,100,0,0,32,32);
         resolve(res_canv);        
-      },0);
+      },10);
     }
   });
   renderer.addSugar(sugar);
