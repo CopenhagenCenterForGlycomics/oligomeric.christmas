@@ -32,15 +32,17 @@ const renderSugar = (seq) => {
   let sugar = new IupacSugar();
   sugar.sequence = seq;
   let renderer = new PaintWatcher(res,PackedLayout);
-  let result = new Promise( resolve => {
-    renderer.onpaint = () => {
-      setTimeout( () => {
-        res_canv.width = 32;
-        res_canv.height = 32;
-        res_canv.getContext('2d').drawImage(res,50,50,100,100,0,0,32,32);
-        resolve(res_canv);        
-      },10);
-    }
+  let result = renderer.ready.then( () => {
+    return new Promise( resolve => {
+      renderer.onpaint = () => {
+        setTimeout( () => {
+          res_canv.width = 32;
+          res_canv.height = 32;
+          res_canv.getContext('2d').drawImage(res,50,50,100,100,0,0,32,32);
+          resolve(res_canv);        
+        },0);
+      }
+    });
   });
   renderer.addSugar(sugar);
   renderer.refresh();
