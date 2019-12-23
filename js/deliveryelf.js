@@ -114,9 +114,16 @@ class DeliveryElf extends Elf {
     let start = {x: this.x, y: this.y};
     this.busy = true;
     await go_to.call(this,x,y);
+    if (this.ping) {
+      this.ping();
+    }
     this.cargo = null;
     await go_to.call(this,start.x,start.y,false);
     this.busy = false;
+    if (this.home) {
+      this.x = this.home.x;
+      this.y = this.home.y;
+    }
   }
 
   // .name

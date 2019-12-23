@@ -24,6 +24,29 @@ class PaintWatcher extends LegraCanvasRenderer {
   }
 }
 
+const renderSugar = (seq) => {
+  const res = document.createElement('canvas');
+  res.setAttribute('width','32px');
+  res.setAttribute('height','32px');
+  const res_canv = document.createElement('canvas');
+  let sugar = new IupacSugar();
+  sugar.sequence = seq;
+  let renderer = new PaintWatcher(res,PackedLayout);
+  let result = new Promise( resolve => {
+    renderer.onpaint = () => {
+      setTimeout( () => {
+        res_canv.width = 32;
+        res_canv.height = 32;
+        res_canv.getContext('2d').drawImage(res,50,50,100,100,0,0,32,32);
+        resolve(res_canv);        
+      },0);
+    }
+  });
+  renderer.addSugar(sugar);
+  renderer.refresh();
+  return result;
+};
+
 // Properties x & y
 
 class GlycanTree {
@@ -52,3 +75,5 @@ class GlycanTree {
 }
 
 export default GlycanTree;
+
+export { renderSugar };

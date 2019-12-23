@@ -4,13 +4,47 @@ import { Tween } from 'es6-tween';
 
 const GROWTH_RATE = 1000;
 const MATURATION_TIME = 3*60000;
-const TREE_SLOTS = 10;
+const TREE_SLOTS = 3;
 const TREE_SCALE = 0.5;
+
+const TREE_ROOTS = [
+'GlcNAc(b1-4)GlcNAc',
+'GalNAc',
+'Man',
+'Glc',
+'Fuc'
+];
+
+const filter_substrate = (donor,substrate) => {
+  switch (donor) {
+    case 'Gal':
+      return ['GlcNAc','GalNAc'].indexOf(substrate.r.identifier) >= 0;
+    case 'Man':
+      return ['GlcNAc','Man'].indexOf(substrate.r.identifier) >= 0;
+    case 'Xyl':
+      return ['Gal','Man'].indexOf(substrate.r.identifier) >= 0;
+    case 'Fuc':
+      return ['Gal','Man','Glc'].indexOf(substrate.r.identifier) >= 0;
+    default:
+      return false;
+  }
+};
+
+const filter_depth = (substrate) => {
+  let r = substrate.r;
+  let kids = r.children;
+  for (let kid of r.children) {
+    if (kid.children.length > 0) {
+      return false;
+    }
+  }
+  return true;
+};
 
 class GlycanForest {
   constructor(canvas) {
     this.canvas = canvas;
-    this.trees = Array(10).fill(null);
+    this.trees = Array(TREE_SLOTS).fill(null);
   }
 
   get activeTrees() {
@@ -26,7 +60,7 @@ class GlycanForest {
     if ( ! slot && slot !== 0 ) {
       return;
     }
-    let new_tree = new GlycanTree('Gal(b1-4)Xyl');
+    let new_tree = new GlycanTree(TREE_ROOTS[Math.floor(Math.random()*TREE_ROOTS.length)]);
     new_tree.y = this.canvas.height;
     new_tree.x = (1 + slot) * (this.canvas.width / (TREE_SLOTS + 1) ) ;
     this.trees[slot] = new_tree;
@@ -40,12 +74,14 @@ class GlycanForest {
         tween.pause();
       }
     }).start();
+    new_tree.tween = tween;
   }
 
   targetsFor(residue) {
     let all_composition = this.activeTrees.map( t => [...t.sugar.composition()].map( r => { return { t, r }; } ) ).flat();
-    let right_substrates = all_composition.filter( res => res.r.identifier === 'Gal');
-    let not_crowded = right_substrates.filter( res => res.r.children.length < 3 );
+    let right_substrates = all_composition.filter( filter_substrate.bind(null,residue) );
+    let not_deep = right_substrates.filter( filter_depth );
+    let not_crowded = not_deep.filter( res => res.r.children.length < 3 );
     let not_busy = not_crowded.filter( res => ! res.r.active );
     let potential = not_busy;
     return potential[Math.floor(Math.random()*potential.length)];
@@ -58,7 +94,7 @@ class GlycanForest {
   }
 
   render() {
-    let dirty_trees = this.activeTrees.filter( tree => tree.dirty );    
+    let dirty_trees = this.activeTrees.filter( tree => tree.dirty || tree.paused );    
     if (dirty_trees.length < 1) {
       return;
     }
