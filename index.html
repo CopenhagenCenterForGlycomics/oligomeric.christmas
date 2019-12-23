@@ -15,6 +15,17 @@
 			width: 100vw;
 			height: calc(100vh + 200px);
 		}
+
+		#background {
+			position: absolute;
+			top: 100px;
+			width: 100vw;
+			height: calc(100vh + 200px);
+			background-image: url('background_snow.svg');
+			background-repeat: repeat-y;
+			background-size: 100% 50%;
+			z-index: -3;
+		}
 		h1 {
 			font-family: 'Mountains of Christmas', cursive;
 			font-size: 50px;
@@ -28,7 +39,6 @@
 		}
 		body:before {
 			position: absolute;
-			z-index: -2;
 			pointer-events: none;
 			top: 0;
 			left: 0;
@@ -40,10 +50,57 @@
 			background-size: auto 160px;
 			opacity: 0.3;
 		}
-		.playbutton {
-			cursor: pointer;
+		button[name="play"] {
+		  width: 32px;
+		  height: 32px;
+		  background: black;
+		  border: none;
+		  border-radius: 100%;
+		  margin: auto;
+		  cursor: pointer;
+		}
+		button[name="play"]:focus {
+		  outline: 0;
+		  border: 1px solid hsl(210, 58%, 69%);
+		  box-shadow: 0 0 0 3px hsla(210, 76%, 57%, 0.5);
+		}
+
+		button[name="play"]::after {
+		  content: '';
+		  display: inline-block;
+		  position: relative;
+		  top: 1px;
+		  left: 2px;
+		  border-style: solid;
+		  border-width: 10px 0 10px 12px;
+		  border-color: transparent transparent transparent white;
 		}
 		.acknowledgements {
 			font-family: Helvetica, sans-serif;
-			font-size: 11pt;
-		}</style></head><body><section class=header><h1><span>O</span> <span>l</span> <span>i</span> <span>g</span> <span>o</span> <span>m</span> <span>e</span> <span>r</span> <span>i</span> <span>c</span> <span>&nbsp;</span> <span>C</span> <span>h</span> <span>r</span> <span>i</span> <span>s</span> <span>t</span> <span>m</span> <span>a</span> <span>s</span> <span>!</span></h1><audio id=jingles loop=true><source src=Winter-Rose-Garden-60-Second.mp3 type=audio/mp3></audio><div class=playbutton onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()">⏯️</div></section><div id=forest><canvas id=tree_canvas></canvas><canvas id=elf_canvas></canvas></div><div class=acknowledgements><p>Royalty Free Music from MusicCatRF.com</p></div><script type=text/javascript src=js/runtime.326b62935d2274e2cf71.js></script><script type=text/javascript src=js/vendor.8e6aa59c825c531435ab.js></script><script type=text/javascript src=js/oligomerry.2d48116784148b606085.js></script></body></html>
+		}
+		.acknowledgements p {
+			font-size: 9pt;
+		}
+
+		section.header > a.center {
+		  background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDc2My41IDU2MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNzYzLjUgNTYwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojRkZGRkZGO30NCjwvc3R5bGU+DQo8cG9seWdvbiBjbGFzcz0ic3QwIiBwb2ludHM9IjIyLjYsMzI5LjEgOSwzMjQgOTIuOSwxODMuNCA5Mi45LDE2LjUgMTA4LjEsMTYuNSAxMDguMSwxNzYuNiAzMDQuNywzMTEuMyAyNzAuOCwxODcuNyAyODcuNywxODYgDQoJMzI3LjUsMzM0LjIgNTE4LjEsMzU3LjEgNjEzLDE4Ni44IDM2OC4yLDMxNC43IDM0MC4yLDMwNy4xIDM5MS4xLDI4MS43IDM5Ni4xLDI4Ni44IDYyNCwxNjYuNSA2MjQsNC43IDYzOC40LDQuNyA2MzguNCwxNjguMiANCgk3NTYuMiwyODUuMSA3NDQuMywyOTYuMSA2MzUsMTgwLjkgNTYzLDM1Ny4xIDY5MC45LDMyMS41IDY5NiwzMzUuMSA1MzcuNiwzNzMuMiA1MzcuNiw1MzkuMiA1MjEuNSw1MzkuMiA1MjIuNCwzODIuNSAzMjEuNiwzNjMgDQoJMjQ3LDQ5NC4zIDIzMy41LDQ4NS44IDMwOC45LDM2MS4zIDExMy4yLDIwMi4xIDE3NSwzODYuNyAxOTQuNSwzMDIgMjA2LjQsMzA5LjYgMTg2LjEsMzkzLjUgMjU5LjgsMzU0LjUgMjY3LjQsMzU4LjggMjcyLjksMzYyLjQgDQoJMTc4LjQsNDA4LjggMTI1LjEsNTA4LjcgMTExLjUsNTAxLjEgMTY4LjMsNDA2LjIgOTcuMSwxOTkuNSAiLz4NCjwvc3ZnPg==');
+		  display: inline-block;
+		  width: 3em;
+		  height: 3em;
+		  background-repeat: no-repeat;
+		  position: absolute;
+		  top: 1em;
+		  right: 1em;
+		  padding-right: 1em;
+		  z-index: 1;
+		  filter: sepia(100%) invert(1) saturate(2000%) grayscale(100%);
+		}
+	@media only screen
+	    and (min-device-width: 320px)
+	    and (max-device-width: 480px)
+	    and (-webkit-min-device-pixel-ratio: 2) {
+	    	h1 {
+	    		font-size: 50px;
+	    		line-height: 1em;
+	    	}
+	    }</style></head><body><section id=background></section><section class=header><h1>Oligomeric Christmas!</h1><audio id=jingles loop=true><source src=Winter-Rose-Garden-60-Second.mp3 type=audio/mp3></audio><button name=play onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()"></button> <a class=center href=https://glycomics.ku.dk></a></section><div id=forest><canvas id=tree_canvas></canvas><canvas id=elf_canvas></canvas></div><div class=acknowledgements><h3>Credits</h3><p>Using libraries from <a href=https://legrajs.com/ >Legrajs</a>, <a href=https://es6-tween.js.org/ >ES6-tween</a>. Royalty Free Music from MusicCatRF.com. Made with hygge in Copenhagen by <a href=https://github.com/hirenj/ >@hirenj</a> 2019.</p></div><script type=text/javascript src=js/runtime.326b62935d2274e2cf71.js></script><script type=text/javascript src=js/vendor.8e6aa59c825c531435ab.js></script><script type=text/javascript src=js/oligomerry.ab732ccee609d1f86708.js></script></body></html>
