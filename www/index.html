@@ -26,8 +26,16 @@
 			font-size: 50px;
 			position: absolute;
 		}
+		h1 span:nth-of-type(even){
+		    color:green;
+		}
+		h1 span:nth-of-type(odd){
+		    color:red;
+		}
 		body:before {
 			position: absolute;
+			z-index: -2;
+			pointer-events: none;
 			top: 0;
 			left: 0;
 			content: ' ';
@@ -35,25 +43,54 @@
 			height: 100vh;
 			background-image: url('houses_wide.svg');
 			background-repeat: repeat-x;
-			background-size: auto 150px;
-			opacity: 0.5;
+			background-size: auto 160px;
+			opacity: 0.3;
+		}
+		.playbutton {
+			cursor: pointer;
+		}
+		.acknowledgements {
+			font-family: Helvetica, sans-serif;
+			font-size: 11pt;
 		}
 	</style>
 </head>
 <body>
 <section class="header">
-	<h1>Oligomeric Christmas!</h1>
+	<h1><span>O</span>
+	<span>l</span>
+	<span>i</span>
+	<span>g</span>
+	<span>o</span>
+	<span>m</span>
+	<span>e</span>
+	<span>r</span>
+	<span>i</span>
+	<span>c</span>
+	<span>&nbsp;</span>
+	<span>C</span>
+	<span>h</span>
+	<span>r</span>
+	<span>i</span>
+	<span>s</span>
+	<span>t</span>
+	<span>m</span>
+	<span>a</span>
+	<span>s</span>
+	<span>!</span></h1>
 	<audio id="jingles" loop="true">
 	    <source src="Winter-Rose-Garden-60-Second.mp3" type="audio/mp3">
 	</audio>
-	<div onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()" >Music</div>
+	<div class="playbutton" onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()" >⏯️</div>
 </section>
 <div id="forest">
 <canvas id="tree_canvas"></canvas>
 <canvas id="elf_canvas"></canvas>
 </div>
-<div>
+<div class="acknowledgements">
+	<p>
 	Royalty Free Music from MusicCatRF.com
+	</p>
 </div>
 </body>
 </html>
