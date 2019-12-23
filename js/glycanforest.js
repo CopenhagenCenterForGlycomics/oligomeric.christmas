@@ -87,6 +87,13 @@ class GlycanForest {
   resize() {
     let available_space = this.canvas.width - 2*this.margin;
     let slot_space = Math.floor(available_space / TREE_WIDTH);
+    if (this.trees.length > Math.min(slot_space,TREE_SLOTS)) {
+      this.trees = this.trees.slice( 0, Math.min(slot_space,TREE_SLOTS) );      
+    } else {
+      while (this.trees.length < Math.min(slot_space,TREE_SLOTS)) {
+        this.trees.push(null);
+      }
+    }
     this.trees = this.trees.slice( 0, Math.min(slot_space,TREE_SLOTS) );
     this.activeTrees.forEach( (tree,slot) => {
       tree.x = this.margin + ((1 + slot) * (available_space / (this.trees.length + 1) )) ;

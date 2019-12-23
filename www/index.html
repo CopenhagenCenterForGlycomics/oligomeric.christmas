@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Oligomerry.Christmas</title>
 	<style>
 		@import url('https://fonts.googleapis.com/css?family=Mountains+of+Christmas&display=swap');
@@ -30,10 +31,17 @@
 <body>
 <section>
 	<h1>Oligomeric Christmas!</h1>
+	<audio id="jingles" loop="true">
+	    <source src="Winter-Rose-Garden-60-Second.mp3" type="audio/mp3">
+	</audio>
+	<div onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()" >Music</div>
 </section>
 <div id="forest">
 <canvas id="tree_canvas"></canvas>
 <canvas id="elf_canvas"></canvas>
+</div>
+<div>
+	Royalty Free Music from MusicCatRF.com
 </div>
 </body>
 </html>

@@ -21,6 +21,14 @@ const get_cargo_icon = async (cargo) => {
   return res;
 };
 
+get_cargo_icon('Xyl');
+get_cargo_icon('Man');
+get_cargo_icon('Glc');
+get_cargo_icon('Gal');
+get_cargo_icon('GalNAc');
+get_cargo_icon('Fuc');
+
+
 const update_pack_position = pack => {
   let elf_count = pack.elves.length;
   let elf_rows = chunk(pack.elves,2);

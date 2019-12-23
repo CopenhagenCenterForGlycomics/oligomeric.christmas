@@ -17,6 +17,7 @@ const size_canvases = () => {
 
 let canvas_size = size_canvases();
 
+
 let forest = new GlycanForest(document.querySelector('#tree_canvas'));
 
 forest.margin = 50;
@@ -81,8 +82,22 @@ let packs = construct_packs();
 
 for (let pack of packs) {
   pack.deliverTo(forest);
-  position_pack(pack,canvas_size);
 }
+
+const set_positions = () => {
+  let canvas_size = size_canvases();
+  forest.resize();
+  for (let pack of packs) {
+    position_pack(pack,canvas_size);
+  }
+}
+set_positions();
+
+window.addEventListener("orientationchange", function() {
+  setTimeout( () => {
+    set_positions();
+  },100);
+}, false);
 
 setInterval( () => {
 
