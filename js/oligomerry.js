@@ -4,8 +4,6 @@ import { TOP_MARGIN } from './glycanforest';
 import ElfPack from './elfpack';
 import { ELF_PACK_WIDTH, ELF_PACK_HEIGHT } from './elfpack';
 
-console.log(TOP_MARGIN);
-
 
 const size_canvases = () => {
   let size = document.querySelector('#forest').getBoundingClientRect();
@@ -39,6 +37,24 @@ setInterval(() => {
   });
 },100);
 
+fetch('images/tree.png')
+  .then(res=>{return res.blob()})
+  .then(blob=>{
+    let img_data = URL.createObjectURL(blob);
+    let image = new Image();
+    let res = new Promise( resolve => {
+      image.onload = () => {
+        resolve(image);
+      };
+    });
+    image.src = img_data;
+    return res;
+  }).then( image => {
+    let canv = forest.planted_canvas;
+    for (let i = 0; i < 10; i++) {
+      canv.getContext('2d').drawImage(image,1.5*ELF_PACK_WIDTH + (Math.random()*(canv.width-3*(ELF_PACK_WIDTH))), TOP_MARGIN + (Math.random()*(canv.height-TOP_MARGIN)),ELF_PACK_WIDTH,ELF_PACK_WIDTH);
+    }
+  });
 
 
 let construct_packs = () => {
