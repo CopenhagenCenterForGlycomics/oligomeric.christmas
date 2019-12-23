@@ -26,10 +26,22 @@
 			font-size: 50px;
 			position: absolute;
 		}
+		body:before {
+			position: absolute;
+			top: 0;
+			left: 0;
+			content: ' ';
+			width: 100vw;
+			height: 100vh;
+			background-image: url('houses_wide.svg');
+			background-repeat: repeat-x;
+			background-size: auto 150px;
+			opacity: 0.5;
+		}
 	</style>
 </head>
 <body>
-<section>
+<section class="header">
 	<h1>Oligomeric Christmas!</h1>
 	<audio id="jingles" loop="true">
 	    <source src="Winter-Rose-Garden-60-Second.mp3" type="audio/mp3">
