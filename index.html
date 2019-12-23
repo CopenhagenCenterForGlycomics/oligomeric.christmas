@@ -1,0 +1,49 @@
+<!DOCTYPE html><html><head><meta name=viewport content="width=device-width,initial-scale=1"><title>Oligomerry.Christmas</title><style>@import url('https://fonts.googleapis.com/css?family=Mountains+of+Christmas&display=swap');
+
+		#forest canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+		#forest canvas:last-child {
+			z-index: -1;
+		}
+		#forest {
+			position: relative;
+			width: 100vw;
+			height: calc(100vh + 200px);
+		}
+		h1 {
+			font-family: 'Mountains of Christmas', cursive;
+			font-size: 50px;
+			position: absolute;
+		}
+		h1 span:nth-of-type(even){
+		    color:green;
+		}
+		h1 span:nth-of-type(odd){
+		    color:red;
+		}
+		body:before {
+			position: absolute;
+			z-index: -2;
+			pointer-events: none;
+			top: 0;
+			left: 0;
+			content: ' ';
+			width: 100vw;
+			height: 100vh;
+			background-image: url('houses_wide.svg');
+			background-repeat: repeat-x;
+			background-size: auto 160px;
+			opacity: 0.3;
+		}
+		.playbutton {
+			cursor: pointer;
+		}
+		.acknowledgements {
+			font-family: Helvetica, sans-serif;
+			font-size: 11pt;
+		}</style></head><body><section class=header><h1><span>O</span> <span>l</span> <span>i</span> <span>g</span> <span>o</span> <span>m</span> <span>e</span> <span>r</span> <span>i</span> <span>c</span> <span>&nbsp;</span> <span>C</span> <span>h</span> <span>r</span> <span>i</span> <span>s</span> <span>t</span> <span>m</span> <span>a</span> <span>s</span> <span>!</span></h1><audio id=jingles loop=true><source src=Winter-Rose-Garden-60-Second.mp3 type=audio/mp3></audio><div class=playbutton onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()">⏯️</div></section><div id=forest><canvas id=tree_canvas></canvas><canvas id=elf_canvas></canvas></div><div class=acknowledgements><p>Royalty Free Music from MusicCatRF.com</p></div><script type=text/javascript src=js/runtime.326b62935d2274e2cf71.js></script><script type=text/javascript src=js/vendor.8e6aa59c825c531435ab.js></script><script type=text/javascript src=js/oligomerry.2d48116784148b606085.js></script></body></html>

@@ -1,0 +1,121 @@
+/*!*****************************************!*\
+  !*** ../glycan.js/js/Monosaccharide.js ***!
+  \*****************************************/
+
+/*! exports provided: calculateSiblingOrder, default, StrictMonosaccharide */
+
+/*!********************************!*\
+  !*** multi ./js/oligomerry.js ***!
+  \********************************/
+
+/*! no static exports found */
+
+/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
+
+/*! ./js/oligomerry.js */
+
+/*!*****************************************!*\
+  !*** ../glycan.js/js/CanvasRenderer.js ***!
+  \*****************************************/
+
+/*! exports provided: default */
+
+/*! ModuleConcatenation bailout: Module uses injected variables (process) */
+
+/*! es6-tween */
+
+/*! ./Debug */
+
+/*! ./Renderer */
+
+/*! ./CanvasCanvas */
+
+/*! ../lib/canvas-mouse */
+
+/*! ../sugars.svg */
+
+/*! ./../../oligomerry/node_modules/process/browser.js */
+
+/*!***************************************!*\
+  !*** ./js/oligomerry.js + 22 modules ***!
+  \***************************************/
+
+/*! no exports provided */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/CanvasCanvas.js because of ../glycan.js/js/CanvasRenderer.js */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/CanvasRenderer.js (<- Module uses injected variables (process)) */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/Debug.js because of ../glycan.js/js/SVGRenderer.js */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/Monosaccharide.js because of ../glycan.js/js/SVGRenderer.js */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/Repeat.js because of ../glycan.js/js/SVGRenderer.js */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/SVGRenderer.js (<- Module uses injected variables (process)) */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/Tracing.js because of ../glycan.js/js/SVGRenderer.js */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/lib/MixedTupleMap.js because of ../glycan.js/js/SVGRenderer.js */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/node_modules/.registry.npmjs.org/legra/0.2.0/node_modules/legra/lib/legra.umd.js (<- Module is not an ECMAScript module) */
+
+/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/node_modules/roughjs/dist/rough.umd.js (<- Module is not an ECMAScript module) */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/es6-tween/bundled/Tween.min.js (<- Module is not an ECMAScript module) */
+
+/*!**********************************!*\
+  !*** ../glycan.js/js/Tracing.js ***!
+  \**********************************/
+
+/*! exports provided: Tracer, trace_into_class, TracedMonosaccharide */
+
+/*! ./Monosaccharide */
+
+/*!***********************************!*\
+  !*** ../glycan.js/js/Renderer.js ***!
+  \***********************************/
+
+/*! ./Repeat */
+
+/*!************************************!*\
+  !*** ../glycan.js/js/SVGCanvas.js ***!
+  \************************************/
+
+/*!*******************************!*\
+  !*** ../glycan.js/sugars.svg ***!
+  \*******************************/
+
+/*! ModuleConcatenation bailout: Module is referenced from these modules with unsupported syntax: ../glycan.js/js/CanvasRenderer.js (referenced with cjs require), ../glycan.js/js/SVGRenderer.js (referenced with cjs require) */
+
+/*!*********************************!*\
+  !*** ../glycan.js/js/Repeat.js ***!
+  \*********************************/
+
+/*! ./Tracing */
+
+/*! ../lib/MixedTupleMap */
+
+/*!***************************************!*\
+  !*** ../glycan.js/js/CanvasCanvas.js ***!
+  \***************************************/
+
+/*!****************************************!*\
+  !*** ../glycan.js/lib/canvas-mouse.js ***!
+  \****************************************/
+
+/*!**************************************!*\
+  !*** ../glycan.js/js/SVGRenderer.js ***!
+  \**************************************/
+
+/*! ./SVGCanvas */
+
+/*!********************************!*\
+  !*** ../glycan.js/js/Debug.js ***!
+  \********************************/
+
+/*! debug-any-level */
+
+/*!*****************************************!*\
+  !*** ../glycan.js/lib/MixedTupleMap.js ***!
+  \*****************************************/
