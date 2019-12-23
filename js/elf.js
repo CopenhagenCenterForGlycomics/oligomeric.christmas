@@ -1,7 +1,10 @@
 
 const MAP_URL = 'images/tilemap_elf.png';
 
-const OUTPUT_SIZE = 64;
+const dpr = window.devicePixelRatio || 1;
+
+
+const OUTPUT_SIZE = dpr > 1 ? 48 * dpr : 64*dpr;
 const INPUT_SIZE = 128;
 const ROTATE_DELTA = 30;
 
@@ -36,5 +39,7 @@ class Elf {
     ctx.drawImage(map,(Math.floor((this.rotate % 360) / ROTATE_DELTA) )*INPUT_SIZE,0,INPUT_SIZE,INPUT_SIZE,this.x - 0.5*OUTPUT_SIZE,this.y - 0.5*OUTPUT_SIZE,OUTPUT_SIZE,OUTPUT_SIZE );
   }
 }
+
+export { OUTPUT_SIZE as ELF_SIZE }
 
 export default Elf

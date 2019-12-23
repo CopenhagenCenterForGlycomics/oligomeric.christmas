@@ -2,16 +2,24 @@ import DeliveryElf from './deliveryelf';
 import GlycanForest from './glycanforest';
 import { TOP_MARGIN } from './glycanforest';
 import ElfPack from './elfpack';
+import { ELF_PACK_WIDTH, ELF_PACK_HEIGHT } from './elfpack';
 
 console.log(TOP_MARGIN);
 
 
 const size_canvases = () => {
   let size = document.querySelector('#forest').getBoundingClientRect();
+  // Get the device pixel ratio, falling back to 1.
+  let dpr = window.devicePixelRatio || 1;
+  // Get the size of the canvas in CSS pixels.
+  size.width = size.width * dpr;
+  size.height = size.height * dpr;
+
   for (let canvas of document.querySelectorAll('#forest canvas')) {
     canvas.width = size.width;
     canvas.height = size.height;
   }
+
   return {w: size.width, h: size.height};
 };
 
@@ -20,7 +28,7 @@ let canvas_size = size_canvases();
 
 let forest = new GlycanForest(document.querySelector('#tree_canvas'));
 
-forest.margin = 50;
+forest.margin = 1.5*ELF_PACK_WIDTH;
 forest.resize();
 
 forest.startGrowing();
@@ -74,8 +82,8 @@ let construct_packs = () => {
 };
 
 const position_pack = (pack,canvas_size) => {
-  pack.x = canvas_size.w*pack.placement.l + (pack.placement.l <= 0.5 ? 64 : -128 );
-  pack.y = TOP_MARGIN + (canvas_size.h - TOP_MARGIN)*pack.placement.t + (pack.placement.t < 0.5 ? 64 : pack.placement.t === 0.5 ? 0 : -128 );
+  pack.x = canvas_size.w*pack.placement.l + (pack.placement.l <= 0.5 ? ELF_PACK_WIDTH : -2*ELF_PACK_WIDTH );
+  pack.y = TOP_MARGIN + (canvas_size.h - TOP_MARGIN)*pack.placement.t + (pack.placement.t < 0.5 ? ELF_PACK_HEIGHT : pack.placement.t === 0.5 ? 0 : -2*ELF_PACK_HEIGHT );
 };
 
 let packs = construct_packs();

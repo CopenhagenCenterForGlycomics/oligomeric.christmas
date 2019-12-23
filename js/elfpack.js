@@ -1,9 +1,10 @@
 import DeliveryElf from './deliveryelf';
+import { ELF_SIZE } from './elf';
 
 import { renderSugar } from './glycantree';
 
-const ELF_PACK_HEIGHT = 64;
-const ELF_PACK_WIDTH = 64;
+const ELF_PACK_HEIGHT = ELF_SIZE;
+const ELF_PACK_WIDTH = ELF_SIZE;
 
 const chunk = (arr, size) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
@@ -133,3 +134,4 @@ class ElfPack {
 }
 
 export default ElfPack;
+export { ELF_PACK_WIDTH, ELF_PACK_HEIGHT };

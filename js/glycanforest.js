@@ -2,9 +2,12 @@ import GlycanTree from './glycantree';
 
 import { Tween } from 'es6-tween';
 
+const dpr = window.devicePixelRatio || 1;
+
+
 const GROWTH_RATE = 1000;
 const MATURATION_TIME = 1*10000;
-const TOP_MARGIN = 128;
+const TOP_MARGIN = dpr * 128;
 const TREE_SLOTS = 3;
 const TREE_SCALE = 0.5;
 const TREE_WIDTH = 250;
@@ -27,7 +30,7 @@ const plant_tree = (tree,forest) => {
   let min_scale = Math.max(0.1,TREE_SCALE*Math.random()*0.5);
   forest.planting_trees.push(tree);
   tree.tween = new Tween(tree)
-  .to({y: TOP_MARGIN - min_scale*tree.canvas.height, x: Math.floor(Math.random()*forest.canvas.width), scale: min_scale  },1000)
+  .to({y: TOP_MARGIN - min_scale*tree.canvas.height*dpr, x: Math.floor(Math.random()*forest.canvas.width), scale: min_scale*dpr  },1000)
   .on('complete', () => {
     forest.planting_trees.splice(forest.planting_trees.indexOf(tree),1);
     forest.planted_canvas.getContext('2d').drawImage(tree.canvas, tree.x, tree.y, tree.canvas.width*tree.scale, tree.canvas.height*tree.scale );

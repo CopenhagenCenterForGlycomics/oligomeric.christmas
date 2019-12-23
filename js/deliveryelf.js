@@ -1,12 +1,15 @@
-import Elf from './elf.js';
+import Elf from './elf';
+import { ELF_SIZE } from './elf';
 
 import { Easing, Tween, autoPlay } from 'es6-tween';
 
 const rad = (angle) => angle * (Math.PI / 180);
 
-const CARGO_DISTANCE = 32;
+const dpr = window.devicePixelRatio || 1;
+
+const CARGO_DISTANCE = 32*dpr;
 const CARGO_ICON_SIZE = 32;
-const CARGO_OUTPUT_SIZE = 32;
+const CARGO_OUTPUT_SIZE = 32*dpr;
 
 CanvasRenderingContext2D.prototype.roundRect = function(sx,sy,ex,ey,r) {
     var r2d = Math.PI/180;
@@ -30,13 +33,13 @@ const render_label = (label,x,y,canvas) => {
   ctx.save();
   ctx.translate(x,y);
   ctx.fillStyle = 'black';
-  ctx.roundRect(-32,40,32,60,5);
+  ctx.roundRect(-0.5*ELF_SIZE,0.5*ELF_SIZE,0.5*ELF_SIZE,ELF_SIZE,ELF_SIZE/10);
   ctx.fill();
-  ctx.font="16px Helvetica";
+  ctx.font=`${dpr*16}px Helvetica, sans-serif`;
   ctx.textAlign="center"; 
   ctx.textBaseline = "middle";
   ctx.fillStyle = "#ffffff";
-  ctx.fillText(label,0,50);
+  ctx.fillText(label,0,0.75*ELF_SIZE);
   ctx.restore();
 }
 
@@ -134,10 +137,10 @@ class DeliveryElf extends Elf {
     let cargo_x = this.x + Math.floor(Math.cos(rad(this.rotate+90)) * CARGO_DISTANCE);
     let cargo_y = this.y + Math.floor(Math.sin(rad(this.rotate+90)) * CARGO_DISTANCE);
     let ctx = this.canvas.getContext('2d');
+    render_label(this.name || 'Nisse',this.x,this.y,this.canvas);
     if (this.cargo) {
       ctx.drawImage(this.cargo,0,0,CARGO_ICON_SIZE,CARGO_ICON_SIZE,cargo_x - 0.5*CARGO_OUTPUT_SIZE,cargo_y - 0.5*CARGO_OUTPUT_SIZE,CARGO_OUTPUT_SIZE,CARGO_OUTPUT_SIZE );
     }
-    render_label(this.name || 'Nisse',this.x,this.y,this.canvas);
   }
 }
 
