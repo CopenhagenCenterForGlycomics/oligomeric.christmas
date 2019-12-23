@@ -32,7 +32,7 @@ const render_label = (label,x,y,canvas) => {
   const ctx = canvas.getContext('2d');
   ctx.save();
   ctx.translate(x,y);
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = 'rgba(200,200,200,0.5)';
   ctx.roundRect(-0.5*ELF_SIZE,0.5*ELF_SIZE,0.5*ELF_SIZE,ELF_SIZE,ELF_SIZE/10);
   ctx.fill();
   ctx.font=`${dpr*16}px Helvetica, sans-serif`;
