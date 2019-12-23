@@ -38,7 +38,7 @@ const render_label = (label,x,y,canvas) => {
   ctx.font=`${dpr*16}px Helvetica, sans-serif`;
   ctx.textAlign="center"; 
   ctx.textBaseline = "middle";
-  ctx.fillStyle = "#ffffff";
+  ctx.fillStyle = "rgba(100,100,100,1)";
   ctx.fillText(label,0,0.75*ELF_SIZE);
   ctx.restore();
 }
