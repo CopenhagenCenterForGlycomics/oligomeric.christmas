@@ -53,6 +53,19 @@
 			font-family: Helvetica, sans-serif;
 			font-size: 11pt;
 		}
+		section.header > a.center {
+		  background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDc2My41IDU2MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNzYzLjUgNTYwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojRkZGRkZGO30NCjwvc3R5bGU+DQo8cG9seWdvbiBjbGFzcz0ic3QwIiBwb2ludHM9IjIyLjYsMzI5LjEgOSwzMjQgOTIuOSwxODMuNCA5Mi45LDE2LjUgMTA4LjEsMTYuNSAxMDguMSwxNzYuNiAzMDQuNywzMTEuMyAyNzAuOCwxODcuNyAyODcuNywxODYgDQoJMzI3LjUsMzM0LjIgNTE4LjEsMzU3LjEgNjEzLDE4Ni44IDM2OC4yLDMxNC43IDM0MC4yLDMwNy4xIDM5MS4xLDI4MS43IDM5Ni4xLDI4Ni44IDYyNCwxNjYuNSA2MjQsNC43IDYzOC40LDQuNyA2MzguNCwxNjguMiANCgk3NTYuMiwyODUuMSA3NDQuMywyOTYuMSA2MzUsMTgwLjkgNTYzLDM1Ny4xIDY5MC45LDMyMS41IDY5NiwzMzUuMSA1MzcuNiwzNzMuMiA1MzcuNiw1MzkuMiA1MjEuNSw1MzkuMiA1MjIuNCwzODIuNSAzMjEuNiwzNjMgDQoJMjQ3LDQ5NC4zIDIzMy41LDQ4NS44IDMwOC45LDM2MS4zIDExMy4yLDIwMi4xIDE3NSwzODYuNyAxOTQuNSwzMDIgMjA2LjQsMzA5LjYgMTg2LjEsMzkzLjUgMjU5LjgsMzU0LjUgMjY3LjQsMzU4LjggMjcyLjksMzYyLjQgDQoJMTc4LjQsNDA4LjggMTI1LjEsNTA4LjcgMTExLjUsNTAxLjEgMTY4LjMsNDA2LjIgOTcuMSwxOTkuNSAiLz4NCjwvc3ZnPg==');
+		  display: inline-block;
+		  width: 3em;
+		  height: 3em;
+		  background-repeat: no-repeat;
+		  position: absolute;
+		  top: 1em;
+		  right: 1em;
+		  padding-right: 1em;
+		  z-index: 1;
+		  filter: sepia(100%) invert(1) saturate(2000%) grayscale(100%);
+		}
 	</style>
 </head>
 <body>
@@ -62,6 +75,7 @@
 	    <source src="Winter-Rose-Garden-60-Second.mp3" type="audio/mp3">
 	</audio>
 	<div class="playbutton" onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()" >⏯️</div>
+	<a class="center" href="https://glycomics.ku.dk"></a>
 </section>
 <div id="forest">
 <canvas id="tree_canvas"></canvas>

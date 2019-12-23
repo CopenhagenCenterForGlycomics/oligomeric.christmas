@@ -53,7 +53,7 @@ const go_to = function(x,y,outbound=true) {
   let total_distance = Math.abs(y - this.y) + Math.abs(x - this.x);
   let second_target = {x,y};
   let tween_first_target = new Tween(coords)
-  .to(first_target, 10*(Math.abs(first_target.x-this.x)+Math.abs(first_target.y-this.y)))
+  .to(first_target, (10/dpr)*(Math.abs(first_target.x-this.x)+Math.abs(first_target.y-this.y)))
   .easing(Easing.Linear)
   .on('update', ({ x, y }) => {
     this.rotate = -90 + Math.atan2(first_target.y - this.y, first_target.x - this.x) * 180 / Math.PI;
