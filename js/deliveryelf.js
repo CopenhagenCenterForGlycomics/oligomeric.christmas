@@ -71,7 +71,7 @@ const go_to = function(x,y,outbound=true) {
 
 
   let tween_final_target = new Tween(coords)
-  .to({x,y},10*(Math.abs(first_target.x-x)+Math.abs(first_target.y-y)))
+  .to({x,y},(10/dpr)*(Math.abs(first_target.x-x)+Math.abs(first_target.y-y)))
   .easing(Easing.Linear)
   .on('update', ({ x, y }) => {
     this.rotate = -90 + Math.atan2(y - this.y, x - this.x) * 180 / Math.PI;

@@ -66,6 +66,15 @@
 		  z-index: 1;
 		  filter: sepia(100%) invert(1) saturate(2000%) grayscale(100%);
 		}
+	@media only screen
+	    and (min-device-width: 320px)
+	    and (max-device-width: 480px)
+	    and (-webkit-min-device-pixel-ratio: 2) {
+	    	h1 {
+	    		font-size: 50px;
+	    		line-height: 1em;
+	    	}
+	    }
 	</style>
 </head>
 <body>
