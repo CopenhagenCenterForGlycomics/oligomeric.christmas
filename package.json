@@ -17,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "glycan.js": "github:hirenj/glycan.js",
+    "legra-glycan.js": "github:hirenj/legra-glycan.js",
     "es6-tween": "^5.4.1"
   },
   "devDependencies": {

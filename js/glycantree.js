@@ -1,4 +1,5 @@
-import { LegraCanvasRenderer, CondensedIupac, SugarAwareLayout, Sugar } from 'glycan.js';
+import { CondensedIupac, SugarAwareLayout, Sugar } from 'glycan.js';
+import { LegraCanvasRenderer } from 'legra-glycan.js';
 
 let Iupac = CondensedIupac.IO;
 
