@@ -34,15 +34,13 @@
 
 /*! ../sugars.svg */
 
-/*! ./../../oligomerry/node_modules/process/browser.js */
+/*! ./../../oligomerry/node_modules/.registry.npmjs.org/process/0.11.10/node_modules/process/browser.js */
 
 /*!***************************************!*\
-  !*** ./js/oligomerry.js + 22 modules ***!
+  !*** ./js/oligomerry.js + 21 modules ***!
   \***************************************/
 
 /*! no exports provided */
-
-/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/CanvasCanvas.js because of ../glycan.js/js/CanvasRenderer.js */
 
 /*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/js/CanvasRenderer.js (<- Module uses injected variables (process)) */
 
@@ -58,11 +56,11 @@
 
 /*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/lib/MixedTupleMap.js because of ../glycan.js/js/SVGRenderer.js */
 
-/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/node_modules/.registry.npmjs.org/legra/0.2.0/node_modules/legra/lib/legra.umd.js (<- Module is not an ECMAScript module) */
+/*! ModuleConcatenation bailout: Cannot concat with ../legra-glycan.js/node_modules/.registry.npmjs.org/legra/0.2.0/node_modules/legra/lib/legra.umd.js (<- Module is not an ECMAScript module) */
 
-/*! ModuleConcatenation bailout: Cannot concat with ../glycan.js/node_modules/roughjs/dist/rough.umd.js (<- Module is not an ECMAScript module) */
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/.github.com/hirenj/glycan.js/0f1341d7f179b2b8bc602e24036ffc7d766df354_@babel+core@7.7.7/node_modules/glycan.js/js/main.js */
 
-/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/es6-tween/bundled/Tween.min.js (<- Module is not an ECMAScript module) */
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/.registry.npmjs.org/es6-tween/5.5.10/node_modules/es6-tween/bundled/Tween.min.js (<- Module is not an ECMAScript module) */
 
 /*!**********************************!*\
   !*** ../glycan.js/js/Tracing.js ***!
