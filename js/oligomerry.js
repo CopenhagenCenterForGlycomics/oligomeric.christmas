@@ -1,6 +1,5 @@
 import DeliveryElf from './deliveryelf';
 import GlycanForest from './glycanforest';
-import { TOP_MARGIN, HUD_TOP } from './glycanforest';
 import ElfPack from './elfpack';
 import { ELF_PACK_WIDTH, ELF_PACK_HEIGHT, get_cargo_icon } from './elfpack';
 import Factory, { accepts } from './factory';
@@ -30,6 +29,25 @@ const PIPELINE_DEFS = [
 // in index.html, so each card visually belongs to its stretch of the stack.
 const STAGE_COLORS = ['#3fa9c9','#55b299','#6cba6c','#8ebf55','#b8b24a','#e3a33c'];
 
+// Adjacent pairs of pipeline stages share one (double-height) cisterna -
+// Man+GalNAc, GlcA+Xyl, Gal+NeuAc - rather than each stage getting its
+// own thin band. Each stage still keeps its own Factory/donor
+// pool/elf pack; only the visual compartment is shared.
+const CISTERNA_GROUP_SIZE = 2;
+const group_of = (stage) => Math.floor(stage / CISTERNA_GROUP_SIZE);
+const CISTERNA_COUNT = Math.ceil(PIPELINE_DEFS.length / CISTERNA_GROUP_SIZE);
+const CISTERNA_COLORS = PIPELINE_DEFS
+  .map( (_,i) => i )
+  .filter( i => i % CISTERNA_GROUP_SIZE === 0 )
+  .map( i => STAGE_COLORS[i] );
+
+const hex_to_rgba = (hex,alpha) => {
+  let r = parseInt(hex.slice(1,3),16);
+  let g = parseInt(hex.slice(3,5),16);
+  let b = parseInt(hex.slice(5,7),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+};
+
 const dpr = window.devicePixelRatio || 1;
 const CHARGE_ARC_RADIUS = 40 * dpr;
 
@@ -52,7 +70,7 @@ const size_canvases = () => {
 let canvas_size = size_canvases();
 
 
-let forest = new GlycanForest(document.querySelector('#tree_canvas'));
+let forest = new GlycanForest(document.querySelector('#tree_canvas'),CISTERNA_COUNT);
 
 forest.margin = 1.5*ELF_PACK_WIDTH;
 forest.resize();
@@ -71,7 +89,7 @@ const factories = PIPELINE_DEFS.map( def => new Factory(def.cargo,{capacity: def
 factories.forEach( (factory,i) => {
   let next = factories[i+1];
   factory.onRelease = next
-    ? (tree) => next.admit(tree)
+    ? (tree) => { next.admit(tree); forest.setTreeStage(tree,group_of(i+1)); }
     : (tree) => tree.notifyPipelineDone();
 });
 
@@ -85,9 +103,9 @@ const entry_stage_for = (identifier) => {
 };
 
 forest.onTreeCreated = (tree) => {
-  tree.pipelineDone = false;
   let stage = entry_stage_for(tree.sugar.root.identifier);
   factories[stage].admit(tree);
+  forest.setTreeStage(tree,group_of(stage));
 };
 
 forest.startGrowing();
@@ -126,7 +144,7 @@ fetch('images/tree.png')
   }).then( image => {
     let canv = forest.planted_canvas;
     for (let i = 0; i < 10; i++) {
-      canv.getContext('2d').drawImage(image,1.5*ELF_PACK_WIDTH + (Math.random()*(canv.width-3*(ELF_PACK_WIDTH))), TOP_MARGIN + (Math.random()*(canv.height-TOP_MARGIN)),ELF_PACK_WIDTH,ELF_PACK_WIDTH);
+      canv.getContext('2d').drawImage(image,1.5*ELF_PACK_WIDTH + (Math.random()*(canv.width-3*(ELF_PACK_WIDTH))), forest.forestTop + (Math.random()*(forest.forestBottom-forest.forestTop)),ELF_PACK_WIDTH,ELF_PACK_WIDTH);
     }
   });
 
@@ -212,10 +230,14 @@ const update_hud = () => {
     `${elf_pool_remaining()} elves free` + (costLedger.overBudget ? ' - over budget!' : '');
 };
 
+// Each cisterna is a full-width horizontal band shared by a couple of
+// factories - every factory still gets its own worker sub-row within
+// that shared band, idling at the two ends of the page rather than
+// clustered in the middle where the cargo itself travels.
 const position_pack = (pack,index,canvas_size) => {
-  let slot_width = canvas_size.w / factories.length;
-  pack.x = slot_width * (index + 0.5);
-  pack.y = HUD_TOP + 0.55*(TOP_MARGIN - HUD_TOP);
+  pack.leftX = forest.margin;
+  pack.rightX = canvas_size.w - forest.margin;
+  pack.y = forest.subRowCenterY(group_of(index), index % CISTERNA_GROUP_SIZE, CISTERNA_GROUP_SIZE);
 };
 
 const packs = PIPELINE_DEFS.map( (def,i) => {
@@ -227,6 +249,29 @@ const packs = PIPELINE_DEFS.map( (def,i) => {
 });
 
 build_hud();
+
+// Tone.js (~100KB) and tinsel-glycan.js's music module are only ever
+// fetched here, on first play - never from the page's main bundle.
+// tinsel-glycan.js/music expects a UMD-style `window.Tone` global (see
+// its own header comment on why), but webpack's module system means a
+// plain `import 'tone'` never attaches one - `tone`'s package.json
+// only has a CJS/UMD browser build, no ES module, so the import below
+// resolves to its `module.exports`, which we attach ourselves before
+// the music module's own `import 'tone'` runs and reads it back.
+let musicPlaying = false;
+document.getElementById('play-music').addEventListener('click', async () => {
+  if (musicPlaying) {
+    const music = await import('tinsel-glycan.js/music');
+    music.stop();
+    musicPlaying = false;
+    return;
+  }
+  const Tone = await import('tone');
+  window.Tone = window.Tone || Tone.default || Tone;
+  const music = await import('tinsel-glycan.js/music');
+  await music.start();
+  musicPlaying = true;
+});
 
 const set_positions = () => {
   let canvas_size = size_canvases();
@@ -247,6 +292,7 @@ requestAnimationFrame(() => {
   let canvas = document.querySelector('#elf_canvas');
   let ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  draw_stack(ctx,canvas);
   for (let pack of packs) {
     for (let elf of pack.elves) {
       elf.render();
@@ -255,6 +301,29 @@ requestAnimationFrame(() => {
   supplyTransports.forEach( (transport,i) => draw_charge_arc(ctx,transport,STAGE_COLORS[i]) );
 });
 },100);
+
+// The classical stack diagram, drawn as flat bands: cis cisterna at
+// the foot of the page, trans at the middle, each tinted so it reads
+// as a distinct compartment even before any cargo is in it. Each band
+// is shared by a pair of factories, so a thin divider marks the
+// worker sub-row boundary between them.
+function draw_stack(ctx,canvas) {
+  for (let group = 0; group < CISTERNA_COUNT; group++) {
+    let bounds = forest.bandBounds(group);
+    let top = bounds.top;
+    let height = bounds.bottom - bounds.top;
+    ctx.fillStyle = hex_to_rgba(CISTERNA_COLORS[group],0.07);
+    ctx.fillRect(0,top,canvas.width,height);
+    ctx.strokeStyle = hex_to_rgba(CISTERNA_COLORS[group],0.25);
+    ctx.lineWidth = Math.max(1,dpr);
+    ctx.strokeRect(0,top,canvas.width,height);
+    ctx.beginPath();
+    ctx.moveTo(0,top + height/2);
+    ctx.lineTo(canvas.width,top + height/2);
+    ctx.strokeStyle = hex_to_rgba(CISTERNA_COLORS[group],0.12);
+    ctx.stroke();
+  }
+}
 
 // Minimal: a faint full ring plus a coloured arc growing clockwise from
 // 12 o'clock as chargeProgress fills, centred on the transport's current

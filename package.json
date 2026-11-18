@@ -16,9 +16,11 @@
   "author": "hirenj@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "glycan.js": "file:../glycan.js",
-    "legra-glycan.js": "file:../legra-glycan.js",
-    "es6-tween": "^5.4.1"
+    "glycan.js": "github:CopenhagenCenterForGlycomics/glycan.js",
+    "legra-glycan.js": "github:hirenj/legra-glycan.js",
+    "tinsel-glycan.js": "github:CopenhagenCenterForGlycomics/tinsel-glycan.js",
+    "es6-tween": "^5.4.1",
+    "tone": "^14.8.49"
   },
   "devDependencies": {
     "@babel/core": "^7",

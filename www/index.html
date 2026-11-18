@@ -6,6 +6,10 @@
 	<style>
 		@import url('https://fonts.googleapis.com/css?family=Mountains+of+Christmas&display=swap');
 
+		html, body {
+			margin: 0;
+			width: 100vw;
+		}
 		#forest canvas {
 			position: absolute;
 			top: 0;
@@ -19,18 +23,25 @@
 		#forest {
 			position: relative;
 			width: 100vw;
-			height: calc(100vh + 200px);
+			height: 100vh;
 		}
 
 		#background {
 			position: absolute;
-			top: 100px;
+			top: 0;
 			width: 100vw;
-			height: calc(100vh + 200px);
+			height: 100vh;
 			background-image: url('background_snow.svg');
 			background-repeat: repeat-y;
 			background-size: 100% 50%;
 			z-index: -3;
+		}
+		section.header {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			z-index: 5;
 		}
 		h1 {
 			font-family: 'Mountains of Christmas', cursive;
@@ -250,10 +261,7 @@
 <section id="background"></section>
 <section class="header">
 	<h1>Oligomeric Christmas!</h1>
-	<audio id="jingles" loop="true">
-	    <source src="Winter-Rose-Garden-60-Second.mp3" type="audio/mp3">
-	</audio>
-	<button name="play" onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()" ></button>
+	<button name="play" id="play-music"></button>
 	<a class="center" href="https://glycomics.ku.dk"></a>
 </section>
 <div id="forest">
@@ -276,7 +284,7 @@
 <div class="acknowledgements">
 	<h3>Credits</h3>
 	<p>
-	Using libraries from <a href="https://legrajs.com/">Legrajs</a>, <a href="https://es6-tween.js.org/">ES6-tween</a>. Royalty Free Music from MusicCatRF.com. Made with hygge in Copenhagen by <a href="https://github.com/hirenj/">@hirenj</a> 2019.
+	Using libraries from <a href="https://legrajs.com/">Legrajs</a>, <a href="https://es6-tween.js.org/">ES6-tween</a>, <a href="https://tonejs.github.io/">Tone.js</a>. Made with hygge in Copenhagen by <a href="https://github.com/hirenj/">@hirenj</a> 2019.
 	</p>
 </div>
 </body>

@@ -14,10 +14,16 @@ module.exports = {
     static: path.join(__dirname,'www'),
     compress: true,
     host: '0.0.0.0',
-    port: 8080
+    port: 8080,
+    allowedHosts: 'all'
   },
   resolve: {
     alias: {
+      // tinsel-glycan.js's music module expects a single shared Tone.js
+      // instance (see js/oligomerry.js's play-button handler) - without
+      // this, its own nested node_modules/tone and ours would resolve
+      // to two separate bundled copies.
+      tone$: path.resolve(__dirname,'node_modules/tone'),
     },
   },
   module: {
@@ -27,9 +33,12 @@ module.exports = {
       use: 'raw-loader'
     },
     {
+      // Already a built UMD bundle - transpiling it again is wasted
+      // work for ~100KB of code that never needs to run through babel.
       test: /\.js$/,
       exclude: [
-          /logic-solver/
+          /logic-solver/,
+          /node_modules\/tone\//,
       ],
       use: {
         loader: 'babel-loader',

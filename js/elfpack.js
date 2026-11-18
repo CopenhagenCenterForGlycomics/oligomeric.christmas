@@ -32,43 +32,51 @@ get_cargo_icon('GlcA');
 get_cargo_icon('NeuAc');
 
 
+// Workers idle at the two ends of their cisterna, not clustered in the
+// middle where the cargo actually sits - half the pack stacked at the
+// left edge, half at the right, both at the cisterna's height.
 const update_pack_position = pack => {
-  let elf_count = pack.elves.length;
-  let elf_rows = chunk(pack.elves,2);
-  let x = pack.x;
-  let y = pack.y;
-  let row_count = 0;
-  for (let row of elf_rows) {
-    row.forEach( (elf,i) => {
-      elf.home = { x: x + i*ELF_PACK_HEIGHT, y: y + row_count*ELF_PACK_WIDTH };
+  let half = Math.ceil(pack.elves.length / 2);
+  let left = pack.elves.slice(0,half);
+  let right = pack.elves.slice(half);
+  let place = (group,x) => {
+    group.forEach( (elf,i) => {
+      elf.home = { x, y: pack.y + (i - (group.length - 1)/2) * ELF_PACK_HEIGHT };
       if ( ! elf.busy ) {
         elf.x = elf.home.x;
         elf.y = elf.home.y;
       }
     });
-    row_count++;
-  }
+  };
+  place(left,pack.leftX);
+  place(right,pack.rightX);
 }
 
-const make_delivery = async (elf,cargo,target) => {
+// No safety net: the cargo is a live reference to wherever the tree
+// currently is, and the factory keeps rolling its exit chance while
+// the elf is in flight. If the glycan has already moved to another
+// cisterna by the time the elf lands, the delivery is wasted - the
+// donor was already spent and the elf comes home empty-handed.
+const make_delivery = async (elf,cargo,target,factory) => {
+  // Exposed so DeliveryElf.render() can show, live, whether this
+  // delivery is still on track (target.t.currentFactory === factory)
+  // or already doomed - the label colour is just that check read back.
+  elf.deliveryTarget = target;
+  elf.deliveryFactory = factory;
   elf.ping = () => {
-    target.t.addChild(target.r,3,cargo);
-    target.t.deliverycount--;
+    if (target.t.currentFactory === factory) {
+      target.t.addChild(target.r,3,cargo);
+    }
     target.r.active = false;
     target.t.active = false;
-    if (target.t.deliverycount < 1) {
-      target.t.tween.play();
-      target.t.paused = false;
-    }
     delete elf.ping;
+    elf.deliveryTarget = null;
+    elf.deliveryFactory = null;
   };
   elf.cargo = await get_cargo_icon(cargo);
-  elf.deliverCargoAndReturn(target.t.x,target.t.y - 0.5*target.t.canvas.height);
   target.r.active = true;
   target.t.active = true;
-  target.t.tween.pause();
-  target.t.paused = true;
-  target.t.deliverycount = (target.t.deliverycount || 0) + 1;
+  elf.deliverCargoAndReturn(target.t.x,target.t.y - 0.5*target.t.canvas.height);
 };
 
 class ElfPack {
@@ -76,11 +84,16 @@ class ElfPack {
     this.canvas = canvas;
     this.elves = Array(population).fill(null);
     this.elves = this.elves.map( () => new DeliveryElf(canvas));
-    this.elves.forEach( elf => {
-      elf.name = cargo_type;
+    // Only the first elf on each side carries a name tag - with several
+    // elves stacked tight within one (narrow) cisterna band, every elf
+    // relabelling the same cargo type on top of each other just blurs
+    // into illegible repeated text.
+    this.elves.forEach( (elf,i) => {
+      elf.name = (i === 0 || i === Math.ceil(population/2)) ? cargo_type : null;
     });
-    this.x = 0;
-    this.y = 0;
+    this.left_x = 0;
+    this.right_x = 0;
+    this.pack_y = 0;
     this._interval = 1000;
     this.cargo_type = cargo_type;
   }
@@ -96,18 +109,25 @@ class ElfPack {
     }
     update_pack_position(this);
   }
-  get x() {
-    return this.pack_center_x;
+  get leftX() {
+    return this.left_x;
   }
-  get y() {
-    return this.pack_center_y;
-  }
-  set x(x) {
-    this.pack_center_x = x;
+  set leftX(x) {
+    this.left_x = x;
     update_pack_position(this);
   }
+  get rightX() {
+    return this.right_x;
+  }
+  set rightX(x) {
+    this.right_x = x;
+    update_pack_position(this);
+  }
+  get y() {
+    return this.pack_y;
+  }
   set y(y) {
-    this.pack_center_y = y;
+    this.pack_y = y;
     update_pack_position(this);
   }
   set interval(interval) {
@@ -144,7 +164,7 @@ class ElfPack {
         return;
       }
       costLedger.chargeDelivery();
-      make_delivery(free_elf,this.cargo_type,target);
+      make_delivery(free_elf,this.cargo_type,target,factory);
     },this.interval);
   }
 }

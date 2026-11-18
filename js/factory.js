@@ -55,6 +55,11 @@ class Factory {
 
   admit(tree) {
     tree.currentFactory = this;
+    // Reset here, not just on promotion out of `waiting` - a fresh
+    // arrival should read as "full lifetime remaining" immediately,
+    // and it only starts counting down once tick() below actually
+    // starts rolling for it (i.e. once resident).
+    tree.stageAge = 0;
     if (this.residents.length < this.capacity) {
       this.residents.push(tree);
     } else {
@@ -86,14 +91,24 @@ class Factory {
   // sugar on every residue added, so growing one glycan to n residues is
   // O(n^2) overall - fine at the sizes the budget/residency system is
   // meant to produce, not fine if something runs away to hundreds.
+  //
+  // The exit roll fires regardless of whether an elf is currently
+  // mid-flight to this tree - there's no "hold the tree still" safety
+  // net. A delivery dispatched here can still land after the tree has
+  // moved on to the next cisterna; the elfpack checks on arrival and
+  // the delivery is simply wasted if so.
   tick(donorPool, costLedger) {
     if (this.pack) {
       costLedger.chargeUpkeep(this.pack.elves.length);
     }
     for (let tree of [...this.residents]) {
-      if (tree.active) {
-        continue;
-      }
+      // Drives the on-screen lifetime bar - how long this tree has
+      // spent as a resident here, against this factory's expected
+      // (1/exitRate) dwell time. Separate from GlycanForest's
+      // planted-tree `age`, which tracks supply-transport relevance
+      // after a glycan has left the pipeline entirely.
+      tree.stageAge = (tree.stageAge || 0) + 1;
+      tree.dirty = true;
       let over_cap = [...tree.sugar.composition()].length >= HARD_RESIDUE_CAP;
       if (over_cap || Math.random() < this.exitRate) {
         this.release(tree);
