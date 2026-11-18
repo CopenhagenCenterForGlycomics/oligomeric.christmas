@@ -1,0 +1,20 @@
+{
+  "name": "Oligomeric Christmas",
+  "dockerFile": "Dockerfile",
+  "forwardPorts": [
+    "8080:8080"
+  ],
+  "features": {
+    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+  },
+  "mounts": [],
+  "runArgs": [
+    "--network=caddy",
+    "--label=caddy_3=oligomeric.christmas.atlas.test:80, oligomeric.christmas.test:80",
+    "--label=caddy_3.reverse_proxy=\"{{upstreams 8080:8080}}\""
+  ],
+  "remoteEnv": {
+    "SSH_AUTH_SOCK": "/ssh-agent-relay/agent.sock"
+  },
+  "overrideCommand": true
+}
