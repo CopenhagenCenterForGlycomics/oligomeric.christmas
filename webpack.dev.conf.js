@@ -1,16 +1,15 @@
 'use strict'
 const path = require('path')
 const webpack = require('webpack')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const TerserPlugin = require('terser-webpack-plugin')
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
   },
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-cheap-module-source-map',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'js/[name].[chunkhash].js',
@@ -19,26 +18,24 @@ const webpackConfig = merge(baseWebpackConfig, {
   plugins: [
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
-    // see https://github.com/ampedandwired/html-webpack-plugin
+    // see https://github.com/jantimon/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'www/index.html',
-      inject: true,
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
+      inject: true
     }),
-    // keep module.id stable when vendor modules does not change
-    new webpack.HashedModuleIdsPlugin(),
-    // enable scope hoisting
-    new webpack.optimize.ModuleConcatenationPlugin(),
     // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, 'www'),
-        to: '',
-        ignore: ['.*','index.html']
-      }
-    ])
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'www'),
+          to: '',
+          globOptions: {
+            ignore: ['**/.*', '**/index.html']
+          }
+        }
+      ]
+    })
   ]
 })
 

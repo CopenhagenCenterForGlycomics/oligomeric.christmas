@@ -1,7 +1,6 @@
 'use strict'
 const path = require('path')
-const webpack = require('webpack')
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -17,6 +16,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: 'js/[id].[chunkhash].js'
   },
   optimization: {
+    moduleIds: 'deterministic', // keep module ids stable when vendor modules does not change
+    concatenateModules: true, // enable scope hoisting
     runtimeChunk: 'single', // enable "runtime" chunk
     splitChunks: {
       cacheGroups: {
@@ -26,19 +27,20 @@ const webpackConfig = merge(baseWebpackConfig, {
           chunks: 'all'
         }
       }
-    }
+    },
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        terserOptions: {
+          ecma: 6,
+        },
+      }),
+    ],
   },
   plugins: [
-    new TerserPlugin({
-      parallel: true,
-      terserOptions: {
-        ecma: 6,
-      },
-      sourceMap: false,
-    }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
-    // see https://github.com/ampedandwired/html-webpack-plugin
+    // see https://github.com/jantimon/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'www/index.html',
@@ -49,22 +51,20 @@ const webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
-      },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
-    }),
-    // keep module.id stable when vendor modules does not change
-    new webpack.HashedModuleIdsPlugin(),
-    // enable scope hoisting
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, 'www'),
-        to: '',
-        ignore: ['.*','index.html']
       }
-    ])
+    }),
+    // copy custom static assets
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'www'),
+          to: '',
+          globOptions: {
+            ignore: ['**/.*', '**/index.html']
+          }
+        }
+      ]
+    })
   ]
 })
 
@@ -72,7 +72,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
 webpackConfig.plugins.push(
   new CompressionWebpackPlugin({
-    filename: '[path].gz[query]',
+    filename: '[path][base].gz',
     algorithm: 'gzip',
     test: new RegExp(
       '\\.(' +

@@ -28,6 +28,8 @@ get_cargo_icon('Glc');
 get_cargo_icon('Gal');
 get_cargo_icon('GalNAc');
 get_cargo_icon('Fuc');
+get_cargo_icon('GlcA');
+get_cargo_icon('NeuAc');
 
 
 const update_pack_position = pack => {
@@ -57,9 +59,6 @@ const make_delivery = async (elf,cargo,target) => {
     if (target.t.deliverycount < 1) {
       target.t.tween.play();
       target.t.paused = false;
-      if ([...target.t.sugar.composition()].length >= 5) {
-        target.t.plant();
-      }
     }
     delete elf.ping;
   };
@@ -85,9 +84,15 @@ class ElfPack {
     this._interval = 1000;
     this.cargo_type = cargo_type;
   }
+  get population() {
+    return this.elves.length;
+  }
   set population(size) {
     while (size > this.elves.length) {
       this.elves.push(new DeliveryElf(this.canvas));
+    }
+    if (size < this.elves.length) {
+      this.elves.length = size;
     }
     update_pack_position(this);
   }
@@ -108,30 +113,41 @@ class ElfPack {
   set interval(interval) {
     window.clearInterval(this.deliveryService);
     this._interval = interval;
-    if (this.deliveryService) {
-      this.deliverTo(this.target);
+    if (this.deliveryService && this.factory) {
+      this.deliverToFactory(this.factory,this.donorPool,this.costLedger);
     }
   }
   get interval() {
     return this._interval;
   }
-  deliverTo(forest) {
-    this.target = forest;
+  deliverToFactory(factory,donorPool,costLedger) {
+    this.factory = factory;
+    this.donorPool = donorPool;
+    this.costLedger = costLedger;
+    window.clearInterval(this.deliveryService);
     this.deliveryService = setInterval(() => {
+      if (costLedger.overBudget) {
+        return;
+      }
       let free_elf = this.elves.filter( elf => ! elf.busy ).shift();
       if ( ! free_elf ) {
         return;
       }
-      let target = this.target.targetsFor(this.cargo_type);
+      let target = factory.targetFor();
       if ( ! target ) {
         return;
       }
-      if (Math.random() < 0.5) {
-        make_delivery(free_elf,this.cargo_type,target);
+      if (Math.random() >= 0.5) {
+        return;
       }
+      if ( ! donorPool.withdraw(this.cargo_type) ) {
+        return;
+      }
+      costLedger.chargeDelivery();
+      make_delivery(free_elf,this.cargo_type,target);
     },this.interval);
   }
 }
 
 export default ElfPack;
-export { ELF_PACK_WIDTH, ELF_PACK_HEIGHT };
+export { ELF_PACK_WIDTH, ELF_PACK_HEIGHT, get_cargo_icon };

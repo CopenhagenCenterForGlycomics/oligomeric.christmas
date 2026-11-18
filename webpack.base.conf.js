@@ -11,7 +11,7 @@ module.exports = {
     path: __dirname + '/dist'
   },
   devServer: {
-    contentBase: path.join(__dirname,'www'),
+    static: path.join(__dirname,'www'),
     compress: true,
     host: '0.0.0.0',
     port: 8080
