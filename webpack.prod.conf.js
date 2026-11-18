@@ -21,10 +21,15 @@ const webpackConfig = merge(baseWebpackConfig, {
     runtimeChunk: 'single', // enable "runtime" chunk
     splitChunks: {
       cacheGroups: {
+        // 'initial', not 'all' - Tone.js only ever gets reached via the
+        // play button's dynamic import() (see js/oligomerry.js), and
+        // 'all' would merge it straight into this eagerly-loaded
+        // bundle, shipping ~340KB extra to every visitor whether or
+        // not they ever press play.
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendor',
-          chunks: 'all'
+          chunks: 'initial'
         }
       }
     },
