@@ -5,9 +5,11 @@
   "dockerFile": "Dockerfile",
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": ["8080:8080"],
+  "forwardPorts": [8080],
 
   "features": {
     "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
-  }
+  },
+
+  "remoteUser" : "node"
 }
