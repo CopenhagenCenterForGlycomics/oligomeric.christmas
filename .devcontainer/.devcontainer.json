@@ -2,16 +2,29 @@
   "name": "Oligomeric Christmas",
   "dockerFile": "Dockerfile",
   "forwardPorts": [
-    "8080:8080"
+    8080
   ],
   "features": {
     "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
   },
-  "mounts": [],
+  "remoteUser": "node",
+  "mounts": [
+    "type=bind,source=/home/hirenj/dev/sviewer,target=/workspaces/sviewer",
+    "type=bind,source=/home/hirenj/dev/ccg-shared-elements,target=/workspaces/ccg-shared-elements",
+    "type=bind,source=/home/hirenj/dev/tinsel-glycan.js,target=/workspaces/tinsel-glycan.js",
+    "type=bind,source=/home/hirenj/dev/legra-glycan.js,target=/workspaces/legra-glycan.js",
+    "type=bind,source=/home/hirenj/dev/glycan.js,target=/workspaces/glycan.js",
+    "type=bind,source=/home/hirenj/configuration/utility_scripts/container_utility,target=/container_utility",
+    "type=bind,source=/home/hirenj/ssh-agent-relay,target=/ssh-agent-relay",
+    "type=bind,source=/home/hirenj/.claude_docker_glycocode,target=/home/node/.claude",
+    "type=bind,source=/home/hirenj/.claude_docker_glycocode.json,target=/home/node/.claude.json",
+    "type=bind,source=/home/hirenj/command_history/TOPLEVEL/dev/oligomeric.christmas/docker.bash,target=/home/node/.bash_history",
+    "type=bind,source=/home/hirenj/.gitconfig,target=/home/node/.gitconfig"
+  ],
   "runArgs": [
     "--network=caddy",
-    "--label=caddy_3=oligomeric.christmas.atlas.test:80, oligomeric.christmas.test:80",
-    "--label=caddy_3.reverse_proxy=\"{{upstreams 8080:8080}}\""
+    "--label=caddy_3=oligomeric_christmas.atlas.test:80, oligomeric_christmas.test:80",
+    "--label=caddy_3.reverse_proxy=\"{{upstreams 8080}}\""
   ],
   "remoteEnv": {
     "SSH_AUTH_SOCK": "/ssh-agent-relay/agent.sock"
