@@ -1,5 +1,9 @@
 <!DOCTYPE html><html><head><meta name=viewport content="width=device-width,initial-scale=1"><title>Oligomeric.Christmas</title><style>@import url('https://fonts.googleapis.com/css?family=Mountains+of+Christmas&display=swap');
 
+		html, body {
+			margin: 0;
+			width: 100vw;
+		}
 		#forest canvas {
 			position: absolute;
 			top: 0;
@@ -7,24 +11,31 @@
 			width: 100%;
 			height: 100%;
 		}
-		#forest canvas:last-child {
-			z-index: -1;
+		#elf_canvas {
+			z-index: 2;
 		}
 		#forest {
 			position: relative;
 			width: 100vw;
-			height: calc(100vh + 200px);
+			height: 100vh;
 		}
 
 		#background {
 			position: absolute;
-			top: 100px;
+			top: 0;
 			width: 100vw;
-			height: calc(100vh + 200px);
+			height: 100vh;
 			background-image: url('background_snow.svg');
 			background-repeat: repeat-y;
 			background-size: 100% 50%;
 			z-index: -3;
+		}
+		section.header {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			z-index: 5;
 		}
 		h1 {
 			font-family: 'Mountains of Christmas', cursive;
@@ -82,6 +93,140 @@
 			font-size: 9pt;
 		}
 
+		#hud {
+			position: absolute;
+			top: 170px;
+			left: 0;
+			width: 100%;
+			height: 130px;
+			display: flex;
+			align-items: center;
+			z-index: 4;
+			font-family: Helvetica, sans-serif;
+			font-size: 11px;
+			pointer-events: none;
+		}
+		#hud-cards {
+			flex: 1;
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+		}
+		#golgi-badge {
+			pointer-events: none;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			flex-shrink: 0;
+			margin-left: 12px;
+		}
+		#golgi-badge svg {
+			width: 90px;
+			height: 76px;
+		}
+		#golgi-badge .golgi-caption {
+			font-size: 9px;
+			font-style: italic;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: rgba(60,60,60,0.6);
+			margin-top: 2px;
+		}
+		.factory-card {
+			pointer-events: auto;
+			background: rgba(255,255,255,0.82);
+			border-radius: 8px;
+			border-top: 4px solid #ccc;
+			padding: 4px 8px;
+			text-align: center;
+			min-width: 72px;
+			color: #333;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+		}
+		.factory-card.cost-card {
+			background: rgba(255,245,210,0.88);
+		}
+		.factory-name {
+			font-weight: bold;
+			text-transform: uppercase;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 3px;
+		}
+		#hud .factory-icon canvas {
+			position: static;
+			width: 18px;
+			height: 18px;
+			image-rendering: pixelated;
+		}
+		.factory-dots {
+			display: flex;
+			justify-content: center;
+			gap: 2px;
+			margin: 2px 0;
+		}
+		.factory-dots .dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 100%;
+			background: rgba(0,0,0,0.15);
+		}
+		.factory-dots .dot.filled {
+			background: #557;
+		}
+		.factory-waiting {
+			font-size: 9px;
+			color: #a44;
+		}
+		.bar {
+			width: 100%;
+			height: 5px;
+			border-radius: 3px;
+			background: rgba(0,0,0,0.12);
+			overflow: hidden;
+			margin: 2px 0;
+		}
+		.bar .bar-fill {
+			height: 100%;
+			background: #4a8;
+			transition: width 0.3s ease;
+		}
+		.bar .bar-fill.low {
+			background: #d93;
+		}
+		.bar .bar-fill.empty {
+			background: #c44;
+		}
+		.factory-epitope {
+			font-size: 9px;
+			color: #778;
+			margin-top: 2px;
+		}
+		.factory-epitope.boosted {
+			color: #a66;
+			font-weight: bold;
+		}
+		.factory-elves {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+		}
+		.factory-elves button {
+			width: 18px;
+			height: 18px;
+			line-height: 1;
+			border-radius: 100%;
+			border: 1px solid #99a;
+			background: #fff;
+			cursor: pointer;
+		}
+		.factory-elves button:disabled {
+			opacity: 0.3;
+			cursor: default;
+		}
+
 		section.header > a.center {
 		  background-image: url('data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgdmlld0JveD0iMCAwIDc2My41IDU2MCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNzYzLjUgNTYwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8c3R5bGUgdHlwZT0idGV4dC9jc3MiPg0KCS5zdDB7ZmlsbDojRkZGRkZGO30NCjwvc3R5bGU+DQo8cG9seWdvbiBjbGFzcz0ic3QwIiBwb2ludHM9IjIyLjYsMzI5LjEgOSwzMjQgOTIuOSwxODMuNCA5Mi45LDE2LjUgMTA4LjEsMTYuNSAxMDguMSwxNzYuNiAzMDQuNywzMTEuMyAyNzAuOCwxODcuNyAyODcuNywxODYgDQoJMzI3LjUsMzM0LjIgNTE4LjEsMzU3LjEgNjEzLDE4Ni44IDM2OC4yLDMxNC43IDM0MC4yLDMwNy4xIDM5MS4xLDI4MS43IDM5Ni4xLDI4Ni44IDYyNCwxNjYuNSA2MjQsNC43IDYzOC40LDQuNyA2MzguNCwxNjguMiANCgk3NTYuMiwyODUuMSA3NDQuMywyOTYuMSA2MzUsMTgwLjkgNTYzLDM1Ny4xIDY5MC45LDMyMS41IDY5NiwzMzUuMSA1MzcuNiwzNzMuMiA1MzcuNiw1MzkuMiA1MjEuNSw1MzkuMiA1MjIuNCwzODIuNSAzMjEuNiwzNjMgDQoJMjQ3LDQ5NC4zIDIzMy41LDQ4NS44IDMwOC45LDM2MS4zIDExMy4yLDIwMi4xIDE3NSwzODYuNyAxOTQuNSwzMDIgMjA2LjQsMzA5LjYgMTg2LjEsMzkzLjUgMjU5LjgsMzU0LjUgMjY3LjQsMzU4LjggMjcyLjksMzYyLjQgDQoJMTc4LjQsNDA4LjggMTI1LjEsNTA4LjcgMTExLjUsNTAxLjEgMTY4LjMsNDA2LjIgOTcuMSwxOTkuNSAiLz4NCjwvc3ZnPg==');
 		  display: inline-block;
@@ -103,4 +248,4 @@
 	    		font-size: 50px;
 	    		line-height: 1em;
 	    	}
-	    }</style></head><body><section id=background></section><section class=header><h1>Oligomeric Christmas!</h1><audio id=jingles loop=true><source src=Winter-Rose-Garden-60-Second.mp3 type=audio/mp3></audio><button name=play onclick="document.getElementById('jingles').paused? document.getElementById('jingles').play() : document.getElementById('jingles').pause()"></button> <a class=center href=https://glycomics.ku.dk></a></section><div id=forest><canvas id=tree_canvas></canvas><canvas id=elf_canvas></canvas></div><div class=acknowledgements><h3>Credits</h3><p>Using libraries from <a href=https://legrajs.com/ >Legrajs</a>, <a href=https://es6-tween.js.org/ >ES6-tween</a>. Royalty Free Music from MusicCatRF.com. Made with hygge in Copenhagen by <a href=https://github.com/hirenj/ >@hirenj</a> 2019.</p></div><script type=text/javascript src=js/runtime.da4e93fb72610c35e12a.js></script><script type=text/javascript src=js/vendor.af354274c5a4734b5861.js></script><script type=text/javascript src=js/oligomerry.2146e72b8bc105f21bfd.js></script></body></html>
+	    }</style><script defer=defer src=js/runtime.d90fc9fcd82f57f20441.js></script><script defer=defer src=js/vendor.338bc9500505bb33eb86.js></script><script defer=defer src=js/oligomerry.7073f662ea41a7bc588f.js></script></head><body><section id=background></section><section class=header><h1>Oligomeric Christmas!</h1><button name=play id=play-music></button> <a class=center href=https://glycomics.ku.dk></a></section><div id=forest><canvas id=tree_canvas></canvas><canvas id=elf_canvas></canvas><div id=hud><div id=golgi-badge><svg viewBox="0 0 170 140" xmlns=http://www.w3.org/2000/svg><path d="M100,56 A14,14 0 0 1 100,84" stroke=#3fa9c9 stroke-width=9 stroke-linecap=round fill=none /><path d="M100,44 A26,26 0 0 1 100,96" stroke=#5ab293 stroke-width=9 stroke-linecap=round fill=none /><path d="M100,32 A38,38 0 0 1 100,108" stroke=#7cb86a stroke-width=9 stroke-linecap=round fill=none /><path d="M100,20 A50,50 0 0 1 100,120" stroke=#b8b24a stroke-width=9 stroke-linecap=round fill=none /><path d="M100,8  A62,62 0 0 1 100,132" stroke=#e3a33c stroke-width=9 stroke-linecap=round fill=none /></svg><div class=golgi-caption>cis &rarr; trans</div></div><div id=hud-cards></div></div></div><div class=acknowledgements><h3>Credits</h3><p>Using libraries from <a href=https://legrajs.com/ >Legrajs</a>, <a href=https://es6-tween.js.org/ >ES6-tween</a>, <a href=https://tonejs.github.io/ >Tone.js</a>. Made with hygge in Copenhagen by <a href=https://github.com/hirenj/ >@hirenj</a> 2019.</p></div></body></html>
